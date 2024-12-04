@@ -70,7 +70,10 @@ int main()
         else if (strcmp(orden, "clear") == 0) {
             LimpiarPantalla();
         }
-        
+        else if (strcmp(orden, "imprimir") == 0) {
+            Imprimir(directorio, &ext_blq_inodos, memdatos, argumento1);
+        }
+
         Grabarinodosydirectorio(directorio,&ext_blq_inodos,fent);
         GrabarByteMaps(&ext_bytemaps,fent);
         GrabarSuperBloque(&ext_superblock,fent);
@@ -212,9 +215,28 @@ int Renombrar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, char *nombrea
 }
 
 int Imprimir(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_DATOS *memdatos, char *nombre) {
-    // Implementación pendiente
+    // Buscar el inodo del archivo
+    int inodo = BuscaFich(directorio, inodos, nombre);
+    if (inodo == NULL_INODO) {
+        printf("Error: El archivo %s no existe.\n", nombre);
+        return -1;
+    }
+
+    // Mostrar información del archivo
+    printf("Contenido del archivo %s:\n", nombre);
+    
+    // Leer y mostrar los bloques de datos asociados al inodo
+    for (int i = 0; i < MAX_NUMS_BLOQUE_INODO; i++) {
+        unsigned short int bloque = inodos->blq_inodos[inodo].i_nbloque[i];
+        if (bloque != NULL_BLOQUE) {  // Si el bloque es válido
+            printf("%s", memdatos[bloque].dato);  // Imprimir el contenido del bloque
+        }
+    }
+    
+    printf("\n");  // Nueva línea al final
     return 0;
 }
+
 
 int Borrar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos,
            EXT_BYTE_MAPS *ext_bytemaps, EXT_SIMPLE_SUPERBLOCK *ext_superblock,
