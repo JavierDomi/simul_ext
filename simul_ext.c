@@ -114,6 +114,18 @@ void Printbytemaps(EXT_BYTE_MAPS *ext_bytemaps)
     printf("\n");
 }
 
+void LeeSuperBloque(EXT_SIMPLE_SUPERBLOCK *psup)
+{
+    printf("Información del Superbloque:\n");
+    printf("Tamaño del bloque: %d bytes\n", psup->s_block_size);
+    printf("Número total de inodos: %d\n", psup->s_inodes_count);
+    printf("Número de inodos libres: %d\n", psup->s_free_inodes_count);
+    printf("Número total de bloques: %d\n", psup->s_blocks_count);
+    printf("Número de bloques libres: %d\n", psup->s_free_blocks_count);
+    printf("Primer bloque de datos: %d\n", psup->s_first_data_block);
+}
+
+
 int ComprobarComando(char *strcomando, char *orden, char *argumento1, char *argumento2) {
     int argc = 0;
     char *token;
@@ -168,13 +180,28 @@ int ComprobarComando(char *strcomando, char *orden, char *argumento1, char *argu
     } else if (strcmp(orden, "info") == 0 || strcmp(orden, "bytemaps") == 0 || 
                strcmp(orden, "dir") == 0 || strcmp(orden, "salir") == 0) {
         if (argc != 1) {
-            printf("ERROR: %s no requiere argumentos\n", orden);
+            printf("ERROR: %s no requieren argumentos\n", orden);
             return -1;
         }
     }
 
     return 0;
 }
+
+int BuscaFich(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, char *nombre) {
+    for (int i = 0; i < MAX_FICHEROS; i++) {
+        // Comprobar si la entrada del directorio está ocupada
+        if (strcmp(directorio[i].dir_nfich, nombre) == 0) {
+            // Si se encuentra el archivo, devolver su número de inodo
+            return directorio[i].dir_inodo;
+        }
+    }
+    // Si no se encuentra, devolver NULL_INODO
+    return NULL_INODO;
+}
+
+
+
 
 
 
