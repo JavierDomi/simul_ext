@@ -215,10 +215,45 @@ int Imprimir(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_DATOS *mem
     return 0;
 }
 
-int Borrar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_BYTE_MAPS *ext_bytemaps, EXT_SIMPLE_SUPERBLOCK *ext_superblock, char *nombre, FILE *fich) {
-    // Implementación pendiente
+int Borrar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos,
+           EXT_BYTE_MAPS *ext_bytemaps, EXT_SIMPLE_SUPERBLOCK *ext_superblock,
+           char *nombre, FILE *fich) {
+    int inodo = BuscaFich(directorio, inodos, nombre);
+    if (inodo == NULL_INODO) {
+        printf("Error: El archivo %s no existe.\n", nombre);
+        return -1;
+    }
+
+    // Liberar el inodo
+    ext_bytemaps->bmap_inodos[inodo] = 0;
+    ext_superblock->s_free_inodes_count++;
+
+    // Liberar los bloques de datos
+    for (int i = 0; i < MAX_NUMS_BLOQUE_INODO; i++) {
+        unsigned short int bloque = inodos->blq_inodos[inodo].i_nbloque[i];
+        if (bloque != NULL_BLOQUE) {
+            ext_bytemaps->bmap_bloques[bloque] = 0;
+            ext_superblock->s_free_blocks_count++;
+            inodos->blq_inodos[inodo].i_nbloque[i] = NULL_BLOQUE;
+        }
+    }
+
+    // Eliminar la entrada del directorio
+    for (int i = 0; i < MAX_FICHEROS; i++) {
+        if (strcmp(directorio[i].dir_nfich, nombre) == 0) {
+            directorio[i].dir_nfich[0] = '\0';
+            directorio[i].dir_inodo = NULL_INODO;
+            break;
+        }
+    }
+
+    // Actualizar el tamaño del archivo a 0
+    inodos->blq_inodos[inodo].size_fichero = 0;
+
+    printf("Archivo %s borrado con éxito.\n", nombre);
     return 0;
 }
+
 
 int Copiar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_BYTE_MAPS *ext_bytemaps, EXT_SIMPLE_SUPERBLOCK *ext_superblock, EXT_DATOS *memdatos, char *nombreorigen, char *nombredestino, FILE *fich) {
     // Implementación pendiente
