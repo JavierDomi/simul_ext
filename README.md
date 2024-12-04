@@ -24,6 +24,11 @@ El simulador permite realizar operaciones básicas sobre el sistema de archivos,
 - remove ❌
 - salir ✅
 
+  Extras
+  
+- Inicio limpio ✅
+- función clear ✅
+
 ## Instalación
 
 1. Clona el repositorio:
