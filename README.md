@@ -13,6 +13,17 @@ El simulador permite realizar operaciones básicas sobre el sistema de archivos,
 - **particion.bin**: Archivo binario que simula la partición del disco.
 - **README.md**: Este archivo.
 
+## Checklist
+
+- bytemaps ✅
+- copy ❌
+- dir ✅
+- info ✅
+- imprimir ❌
+- rename ❌
+- remove ❌
+- salir ✅
+
 ## Instalación
 
 1. Clona el repositorio:
@@ -29,5 +40,5 @@ El simulador permite realizar operaciones básicas sobre el sistema de archivos,
 
    Ejecuta el programa desde la línea de comandos:
 
-      ```bash
-      ./simul_ex
+   ```bash
+   ./simul_ex
