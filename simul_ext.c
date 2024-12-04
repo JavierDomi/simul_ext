@@ -33,10 +33,10 @@ void GrabarDatos(EXT_DATOS *memdatos, FILE *fich);
 
 int main()
 {
-	 char *comando[LONGITUD_COMANDO];
-	 char *orden[LONGITUD_COMANDO];
-	 char *argumento1[LONGITUD_COMANDO];
-	 char *argumento2[LONGITUD_COMANDO];
+	 char comando[LONGITUD_COMANDO];
+	 char orden[LONGITUD_COMANDO];
+	 char argumento1[LONGITUD_COMANDO];
+	 char argumento2[LONGITUD_COMANDO];
 	 
 	 int i,j;
 	 unsigned long int m;
@@ -52,7 +52,7 @@ int main()
      
      // Lectura del fichero completo de una sola vez
      
-     fent = fopen("particion.bin","r+b");-
+     fent = fopen("particion.bin","r+b");
      fread(&datosfich, SIZE_BLOQUE, MAX_BLOQUES_PARTICION, fent);    
      
      
@@ -74,7 +74,14 @@ int main()
 	     if (strcmp(orden,"dir")==0) {
             Directorio(&directorio,&ext_blq_inodos);
             continue;
-            }
+        }
+
+        if (strcmp(orden, "info") == 0) {
+            LeeSuperBloque(&ext_superblock);
+        } else if (strcmp(orden, "bytemaps") == 0) {
+            Printbytemaps(&ext_bytemaps);
+        }
+
          // Escritura de metadatos en comandos rename, remove, copy     
          Grabarinodosydirectorio(&directorio,&ext_blq_inodos,fent);
          GrabarByteMaps(&ext_bytemaps,fent);
@@ -199,6 +206,53 @@ int BuscaFich(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, char *nombre)
     // Si no se encuentra, devolver NULL_INODO
     return NULL_INODO;
 }
+
+void Directorio(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos) {
+    // Implementación pendiente
+}
+
+int Renombrar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, 
+              char *nombreantiguo, char *nombrenuevo) {
+    // Implementación pendiente
+    return 0;
+}
+
+int Imprimir(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, 
+             EXT_DATOS *memdatos, char *nombre) {
+    // Implementación pendiente
+    return 0;
+}
+
+int Borrar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos,
+           EXT_BYTE_MAPS *ext_bytemaps, EXT_SIMPLE_SUPERBLOCK *ext_superblock,
+           char *nombre,  FILE *fich) {
+    // Implementación pendiente
+    return 0;
+}
+
+int Copiar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos,
+           EXT_BYTE_MAPS *ext_bytemaps, EXT_SIMPLE_SUPERBLOCK *ext_superblock,
+           EXT_DATOS *memdatos, char *nombreorigen, char *nombredestino,  FILE *fich) {
+    // Implementación pendiente
+    return 0;
+}
+
+void Grabarinodosydirectorio(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, FILE *fich) {
+    // Implementación pendiente
+}
+
+void GrabarByteMaps(EXT_BYTE_MAPS *ext_bytemaps, FILE *fich) {
+    // Implementación pendiente
+}
+
+void GrabarSuperBloque(EXT_SIMPLE_SUPERBLOCK *ext_superblock, FILE *fich) {
+    // Implementación pendiente
+}
+
+void GrabarDatos(EXT_DATOS *memdatos, FILE *fich) {
+    // Implementación pendiente
+}
+
 
 
 
