@@ -19,11 +19,12 @@ void Grabarinodosydirectorio(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos
 void GrabarByteMaps(EXT_BYTE_MAPS *ext_bytemaps, FILE *fich);
 void GrabarSuperBloque(EXT_SIMPLE_SUPERBLOCK *ext_superblock, FILE *fich);
 void GrabarDatos(EXT_DATOS *memdatos, FILE *fich);
+void LimpiarPantalla();
 
 int main()
 {
 
-    system("clear");  // Limpia la pantalla al iniciar el programa
+    LimpiarPantalla();
 
     char comando[LONGITUD_COMANDO];
     char orden[LONGITUD_COMANDO];
@@ -59,10 +60,14 @@ int main()
             Directorio(directorio,&ext_blq_inodos);
             continue;
         }
-        if (strcmp(orden, "info") == 0) {
+        else if (strcmp(orden, "info") == 0) {
             LeeSuperBloque(&ext_superblock);
-        } else if (strcmp(orden, "bytemaps") == 0) {
+        } 
+        else if (strcmp(orden, "bytemaps") == 0) {
             Printbytemaps(&ext_bytemaps);
+        }
+        else if (strcmp(orden, "clear") == 0) {
+            LimpiarPantalla();
         }
         
         Grabarinodosydirectorio(directorio,&ext_blq_inodos,fent);
@@ -79,6 +84,11 @@ int main()
             return 0;
         }
     }
+}
+
+void LimpiarPantalla()
+{
+    system("clear");
 }
 
 void Printbytemaps(EXT_BYTE_MAPS *ext_bytemaps)
@@ -110,7 +120,7 @@ void LeeSuperBloque(EXT_SIMPLE_SUPERBLOCK *psup)
 int ComprobarComando(char *strcomando, char *orden, char *argumento1, char *argumento2) {
     int argc = 0;
     char *token;
-    char *comandos_validos[] = {"info", "bytemaps", "dir", "rename", "imprimir", "remove", "copy", "salir"};
+    char *comandos_validos[] = {"info", "bytemaps", "dir", "rename", "imprimir", "remove", "copy", "salir", "clear"};
     int num_comandos = sizeof(comandos_validos) / sizeof(comandos_validos[0]);
 
     strcomando[strcspn(strcomando, "\n")] = 0;
@@ -139,7 +149,7 @@ int ComprobarComando(char *strcomando, char *orden, char *argumento1, char *argu
     }
 
     if (!comando_valido) {
-        printf("ERROR: Comando ilegal [bytemaps,copy,dir,info,imprimir,rename,remove,salir]\n");
+        printf("ERROR: Comando ilegal [bytemaps,copy,dir,info,imprimir,rename,remove,salir,clear]\n");
         return -1;
     }
 
@@ -154,7 +164,8 @@ int ComprobarComando(char *strcomando, char *orden, char *argumento1, char *argu
             return -1;
         }
     } else if (strcmp(orden, "info") == 0 || strcmp(orden, "bytemaps") == 0 || 
-               strcmp(orden, "dir") == 0 || strcmp(orden, "salir") == 0) {
+         strcmp(orden, "dir") == 0 || strcmp(orden, "salir") == 0 || strcmp(orden, "clear") == 0)
+{
         if (argc != 1) {
             printf("ERROR: %s no requiere argumentos\n", orden);
             return -1;
