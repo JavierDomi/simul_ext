@@ -27,7 +27,7 @@ El simulador permite realizar operaciones básicas sobre el sistema de archivos,
 
 ## Uso
 
-Ejecuta el programa desde la línea de comandos:
+   Ejecuta el programa desde la línea de comandos:
 
-   ```bash
-   ./simul_ex
+      ```bash
+      ./simul_ex
