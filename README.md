@@ -19,3 +19,15 @@ El simulador permite realizar operaciones básicas sobre el sistema de archivos,
 
    ```bash
    git clone https://github.com/usuario/simul_ext.git
+   
+2. Compila el programa:
+
+   ```bash
+   gcc -o simul_ext simul_ext.c
+
+## Uso
+
+Ejecuta el programa desde la línea de comandos:
+
+   ```bash
+   ./simul_ex
