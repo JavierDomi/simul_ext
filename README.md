@@ -24,7 +24,7 @@ El simulador permite realizar operaciones básicas sobre el sistema de archivos,
 - remove ❌
 - salir ✅
 
-<u>Extras<u>
+<u>Extras</u>
   
 - Inicio limpio ✅
 - función clear ✅
