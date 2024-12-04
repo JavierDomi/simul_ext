@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<string.h>
 #include<ctype.h>
+#include <stdlib.h>
 #include "cabeceras.h"
 
 #define LONGITUD_COMANDO 100
@@ -21,6 +22,9 @@ void GrabarDatos(EXT_DATOS *memdatos, FILE *fich);
 
 int main()
 {
+
+    system("clear");  // Limpia la pantalla al iniciar el programa
+
     char comando[LONGITUD_COMANDO];
     char orden[LONGITUD_COMANDO];
     char argumento1[LONGITUD_COMANDO];
@@ -169,9 +173,26 @@ int BuscaFich(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, char *nombre)
     return NULL_INODO;
 }
 
-void Directorio(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos) {
-    // Implementación pendiente
+void Directorio(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos)
+{
+    int i;
+    unsigned int inodo, tamanio;
+    
+    // Mostrar encabezado
+    printf("Contenido del directorio:\n");
+    printf("%-17s %-10s %-10s\n", "Nombre", "Inodo", "Tamaño");
+    printf("-----------------------------------\n");
+
+    // Recorrer el directorio y mostrar las entradas
+    for (i = 0; i < MAX_FICHEROS; i++) {
+        if (directorio[i].dir_inodo != NULL_INODO) {  // Si el inodo no es NULL, es una entrada válida
+            inodo = directorio[i].dir_inodo;
+            tamanio = inodos->blq_inodos[inodo].size_fichero;
+            printf("%-17s %-10d %-10d\n", directorio[i].dir_nfich, inodo, tamanio);
+        }
+    }
 }
+
 
 int Renombrar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, char *nombreantiguo, char *nombrenuevo) {
     // Implementación pendiente
