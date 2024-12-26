@@ -70,7 +70,11 @@ int main()
        } else if (strcmp(orden, "remove") == 0) {
            Borrar(directorio, &ext_blq_inodos, &ext_bytemaps, &ext_superblock, argumento1, fent);
            grabardatos = 1;
-       }
+       } else if (strcmp(orden, "copy") == 0) {
+            Copiar(directorio, &ext_blq_inodos, &ext_bytemaps, &ext_superblock, memdatos, argumento1, argumento2, fent);
+                grabardatos = 1;
+}
+
       
        if (grabardatos) {
            Grabarinodosydirectorio(directorio,&ext_blq_inodos,fent);
@@ -291,4 +295,38 @@ void GrabarDatos(EXT_DATOS *memdatos, FILE *fich)
    fwrite(memdatos, sizeof(EXT_DATOS), MAX_BLOQUES_DATOS, fich);
 }
 
-
+int Copiar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_BYTE_MAPS *ext_bytemaps, EXT_SIMPLE_SUPERBLOCK *ext_superblock, EXT_DATOS *memdatos, char *nombreorigen, char *nombredestino, FILE *fich) {
+    int inodo_origen = BuscaFich(directorio, inodos, nombreorigen);
+    if (inodo_origen == NULL_INODO) {
+        printf("Error: El archivo origen %s no existe.\n", nombreorigen);
+        return -1;
+    }
+    if (BuscaFich(directorio, inodos, nombredestino) != NULL_INODO) {
+        printf("Error: El archivo destino %s ya existe.\n", nombredestino);
+        return -1;
+    }
+    int inodo_destino = -1;
+    for (int i = 0; i < MAX_INODOS; i++) {
+        if (ext_bytemaps->bmap_inodos[i] == 0) {
+            inodo_destino = i;
+            break;
+        }
+    }
+    if (inodo_destino == -1) {
+        printf("Error: No hay inodos libres para crear el archivo destino.\n");
+        return -1;
+    }
+    ext_bytemaps->bmap_inodos[inodo_destino] = 1;
+    ext_superblock->s_free_inodes_count--;
+    inodos->blq_inodos[inodo_destino] = inodos->blq_inodos[inodo_origen];
+    for (int i = 0; i < MAX_FICHEROS; i++) {
+        if (directorio[i].dir_inodo == NULL_INODO) {
+            strncpy(directorio[i].dir_nfich, nombredestino, LEN_NFICH);
+            directorio[i].dir_nfich[LEN_NFICH-1] = '\0';
+            directorio[i].dir_inodo = inodo_destino;
+            break;
+        }
+    }
+    printf("Archivo %s copiado a %s con éxito.\n", nombreorigen, nombredestino);
+    return 0;
+}
