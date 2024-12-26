@@ -21,7 +21,7 @@ El simulador permite realizar operaciones básicas sobre el sistema de archivos,
 - info ✅
 - imprimir ❌
 - rename ❌
-- remove ❌
+- remove ✅
 - salir ✅
 
 <u>Extras</u>
