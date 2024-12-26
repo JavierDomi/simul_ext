@@ -27,6 +27,7 @@ void LimpiarPantalla();
 int main()
 {
    LimpiarPantalla();
+   
    char comando[LONGITUD_COMANDO];
    char orden[LONGITUD_COMANDO];
    char argumento1[LONGITUD_COMANDO];
