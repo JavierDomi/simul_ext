@@ -15,6 +15,7 @@ int BuscaFich(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, char *nombre)
 void Directorio(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos);
 int Renombrar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, char *nombreantiguo, char *nombrenuevo);
 int Imprimir(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_DATOS *memdatos, char *nombre);
+//int Imprimir(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_DATOS *memdatos, char *nombre, FILE *fich);
 int Borrar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_BYTE_MAPS *ext_bytemaps, EXT_SIMPLE_SUPERBLOCK *ext_superblock, char *nombre, FILE *fich);
 int Copiar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_BYTE_MAPS *ext_bytemaps, EXT_SIMPLE_SUPERBLOCK *ext_superblock, EXT_DATOS *memdatos, char *nombreorigen, char *nombredestino, FILE *fich);
 void Grabarinodosydirectorio(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, FILE *fich);
@@ -219,23 +220,37 @@ void Directorio(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos)
 }
 
 
-int Imprimir(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_DATOS *memdatos, char *nombre)
-{
-   int inodo = BuscaFich(directorio, inodos, nombre);
-   if (inodo == NULL_INODO) {
-       printf("Error: El archivo %s no existe.\n", nombre);
-       return -1;
-   }
-   printf("Contenido del archivo %s:\n", nombre);
-   for (int i = 0; i < MAX_NUMS_BLOQUE_INODO; i++) {
-       unsigned short int bloque = inodos->blq_inodos[inodo].i_nbloque[i];
-       if (bloque != NULL_BLOQUE) {
-           printf("%s", memdatos[bloque].dato);
-       }
-   }
-   printf("\n");
-   return 0;
+int Imprimir(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_DATOS *memdatos, char *nombre) {
+    int inodo = BuscaFich(directorio, inodos, nombre);
+    if (inodo == NULL_INODO) {
+        printf("Error: El archivo %s no existe.\n", nombre);
+        return -1;
+    }
+    printf("Contenido del archivo %s:\n", nombre);
+    unsigned int bytesLeidos = 0;
+    unsigned int tamanoArchivo = inodos->blq_inodos[inodo].size_fichero;
+    for (int i = 0; i < MAX_NUMS_BLOQUE_INODO && bytesLeidos < tamanoArchivo; i++) {
+        unsigned short int bloque = inodos->blq_inodos[inodo].i_nbloque[i];
+        if (bloque != NULL_BLOQUE) {
+            unsigned int bytesALeer = (tamanoArchivo - bytesLeidos < SIZE_BLOQUE) ? (tamanoArchivo - bytesLeidos) : SIZE_BLOQUE;
+            for (unsigned int j = 0; j < bytesALeer; j++) {
+                unsigned char c = memdatos[bloque].dato[j];
+                if (isprint(c) || c == '\n' || c == '\t' || c == '\r') {
+                    putchar(c);
+                } else {
+                    putchar('.');
+                }
+            }
+            bytesLeidos += bytesALeer;
+        }
+    }
+    printf("\n");
+    return 0;
 }
+
+
+
+
 
 
 int Borrar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_BYTE_MAPS *ext_bytemaps, EXT_SIMPLE_SUPERBLOCK *ext_superblock, char *nombre, FILE *fich)
