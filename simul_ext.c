@@ -228,15 +228,17 @@ int Imprimir(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_DATOS *mem
         printf("Error: El archivo %s no existe.\n", nombre);
         return -1;
     }
+    
     printf("Contenido del archivo %s:\n", nombre);
     unsigned int bytesLeidos = 0;
     unsigned int tamanoArchivo = inodos->blq_inodos[inodo].size_fichero;
+    
     for (int i = 0; i < MAX_NUMS_BLOQUE_INODO && bytesLeidos < tamanoArchivo; i++) {
         unsigned short int bloque = inodos->blq_inodos[inodo].i_nbloque[i];
         if (bloque != NULL_BLOQUE) {
             unsigned int bytesALeer = (tamanoArchivo - bytesLeidos < SIZE_BLOQUE) ? (tamanoArchivo - bytesLeidos) : SIZE_BLOQUE;
             for (unsigned int j = 0; j < bytesALeer; j++) {
-                unsigned char c = memdatos[bloque].dato[j];
+                char c = memdatos[bloque - PRIM_BLOQUE_DATOS].dato[j];
                 if (isprint(c) || c == '\n' || c == '\t' || c == '\r') {
                     putchar(c);
                 } else {
@@ -249,10 +251,6 @@ int Imprimir(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_DATOS *mem
     printf("\n");
     return 0;
 }
-
-
-
-
 
 
 int Borrar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_BYTE_MAPS *ext_bytemaps, EXT_SIMPLE_SUPERBLOCK *ext_superblock, char *nombre, FILE *fich)
