@@ -33,7 +33,7 @@ int main()
    char orden[LONGITUD_COMANDO];
    char argumento1[LONGITUD_COMANDO];
    char argumento2[LONGITUD_COMANDO];
-  
+
    EXT_SIMPLE_SUPERBLOCK ext_superblock;
    EXT_BYTE_MAPS ext_bytemaps;
    EXT_BLQ_INODOS ext_blq_inodos;
@@ -42,23 +42,23 @@ int main()
    EXT_DATOS datosfich[MAX_BLOQUES_PARTICION];
    int grabardatos = 0;
    FILE *fent;
-  
+
    fent = fopen("particion.bin","r+b");
    fread(&datosfich, SIZE_BLOQUE, MAX_BLOQUES_PARTICION, fent);   
-  
+
    memcpy(&ext_superblock,(EXT_SIMPLE_SUPERBLOCK *)&datosfich[0], SIZE_BLOQUE);
    memcpy(directorio,(EXT_ENTRADA_DIR *)&datosfich[3], sizeof(EXT_ENTRADA_DIR) * MAX_FICHEROS);
    memcpy(&ext_bytemaps,(EXT_BLQ_INODOS *)&datosfich[1], SIZE_BLOQUE);
    memcpy(&ext_blq_inodos,(EXT_BLQ_INODOS *)&datosfich[2], SIZE_BLOQUE);
    memcpy(memdatos,(EXT_DATOS *)&datosfich[4],MAX_BLOQUES_DATOS*SIZE_BLOQUE);
-  
+
    for (;;){
        do {
            printf (">> ");
            fflush(stdin);
            fgets(comando, LONGITUD_COMANDO, stdin);
        } while (ComprobarComando(comando,orden,argumento1,argumento2) !=0);
-      
+
        if (strcmp(orden,"dir")==0) {
            Directorio(directorio,&ext_blq_inodos);
        } else if (strcmp(orden, "info") == 0) {
@@ -75,9 +75,11 @@ int main()
        } else if (strcmp(orden, "copy") == 0) {
             Copiar(directorio, &ext_blq_inodos, &ext_bytemaps, &ext_superblock, memdatos, argumento1, argumento2, fent);
                 grabardatos = 1;
-}
+       } else if (strcmp(orden, "rename") == 0) {
+            Renombrar(directorio, &ext_blq_inodos, argumento1, argumento2);
+                grabardatos = 1;
+       }
 
-      
        if (grabardatos) {
            Grabarinodosydirectorio(directorio,&ext_blq_inodos,fent);
            GrabarByteMaps(&ext_bytemaps,fent);
@@ -85,7 +87,7 @@ int main()
            GrabarDatos(memdatos,fent);
            grabardatos = 0;
        }
-      
+
        if (strcmp(orden,"salir")==0){
            printf("¡Adiós!\n");
            fclose(fent);
@@ -345,4 +347,29 @@ int Copiar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, EXT_BYTE_MAPS *e
     }
     printf("Archivo %s copiado a %s con éxito.\n", nombreorigen, nombredestino);
     return 0;
+}
+
+int Renombrar(EXT_ENTRADA_DIR *directorio, EXT_BLQ_INODOS *inodos, char *nombreantiguo, char *nombrenuevo) {
+    int inodo_antiguo = BuscaFich(directorio, inodos, nombreantiguo);
+    if (inodo_antiguo == NULL_INODO) {
+        printf("Error: El archivo %s no existe.\n", nombreantiguo);
+        return -1;
+    }
+
+    if (BuscaFich(directorio, inodos, nombrenuevo) != NULL_INODO) {
+        printf("Error: El archivo %s ya existe.\n", nombrenuevo);
+        return -1;
+    }
+
+    for (int i = 0; i < MAX_FICHEROS; i++) {
+        if (strcmp(directorio[i].dir_nfich, nombreantiguo) == 0) {
+            strncpy(directorio[i].dir_nfich, nombrenuevo, LEN_NFICH);
+            directorio[i].dir_nfich[LEN_NFICH - 1] = '\0';
+            printf("Archivo %s renombrado a %s con éxito.\n", nombreantiguo, nombrenuevo);
+            return 0;
+        }
+    }
+
+    printf("Error: No se pudo renombrar el archivo %s.\n", nombreantiguo);
+    return -1;
 }
