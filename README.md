@@ -19,7 +19,7 @@ El simulador permite realizar operaciones básicas sobre el sistema de archivos,
 - copy ✅
 - dir ✅
 - info ✅
-- imprimir ❌
+- imprimir ✅
 - rename ✅
 - remove ✅
 - salir ✅
