@@ -16,11 +16,11 @@ El simulador permite realizar operaciones básicas sobre el sistema de archivos,
 ## Checklist
 
 - bytemaps ✅
-- copy ❌
+- copy ✅
 - dir ✅
 - info ✅
 - imprimir ❌
-- rename ❌
+- rename ✅
 - remove ✅
 - salir ✅
 
