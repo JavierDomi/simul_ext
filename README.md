@@ -48,6 +48,28 @@ El simulador permite realizar operaciones básicas sobre el sistema de archivos,
    ```bash
    ./simul_ex
    ```
-##  
+##  Hecho por
    
-Hecho por Javier Dominguez y Alejandro Sastre
+ - Javier Dominguez
+ - Alejandro Sastre
+
+
+## Link al vídeo:
+  [Vídeo](https://youtu.be/RTbDDGcOyDo)
+
+<br>
+<br>
+
+| Elemento | Realizado | Comentario |
+|----------|:---------:|------------|
+| Arranque | ✅ | El encuadre inicial de las cabeceras y esqueleto main sin errores fue complicado. |
+| Salir y mensajes de error | ✅ | N/A |
+| info | ✅ | N/A |
+| bytemaps | ✅ | N/A |
+| dir | ✅ | N/A |
+| rename | ✅ |  Al principio no éramos capaces de cambiar el nombre y el archivo “desaparecía”. Ese error fue solucionado y ahora funciona correctamente. |
+| Remove | ✅ |  Una vez hecho el print de multibloque borrar fue algo parecido. BORRA MULTIBLOQUE |
+| Imprimir | ✅ |  Ser capaces de leer archivos con más de un bloque fue complicado ya que no siempre accedíamos a los bloques correctos. LEE MULTIBLOQUE |
+| Copiar | ✅ |  La lógica de copiar es parecida a la de print con la complicación de tener que buscar espacio libre para el nuevo archivo. COPIA MULTIBLOQUE |
+| Commits, documentación y video | ✅ |  En cuanto a github no tuvimos muchas dificultades ya que estábamos familiarizados con la herramienta. |
+
