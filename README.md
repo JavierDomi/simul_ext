@@ -47,5 +47,6 @@ El simulador permite realizar operaciones básicas sobre el sistema de archivos,
 
    ```bash
    ./simul_ex
-
+   ```
+   
 Hecho por Javier Dominguez y Alejandro Sastre
