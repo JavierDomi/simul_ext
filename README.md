@@ -34,7 +34,7 @@ El simulador permite realizar operaciones básicas sobre el sistema de archivos,
 1. Clona el repositorio:
 
    ```bash
-   git clone https://github.com/JavierDomi/simul_ext.git
+   git clone -b prod https://github.com/JavierDomi/simul_ext.git
    
 2. Compila el programa:
 
