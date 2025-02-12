@@ -53,10 +53,6 @@ El simulador permite realizar operaciones básicas sobre el sistema de archivos,
  - Javier Dominguez
  - Alejandro Sastre
 
-
-## Link al vídeo:
-  [Vídeo](https://youtu.be/RTbDDGcOyDo)
-
 <br>
 <br>
 
