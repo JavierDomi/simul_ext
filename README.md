@@ -64,7 +64,7 @@ El simulador permite realizar operaciones básicas sobre el sistema de archivos,
 | bytemaps | ✅ | N/A |
 | dir | ✅ | N/A |
 | rename | ✅ |  Al principio no éramos capaces de cambiar el nombre y el archivo “desaparecía”. Ese error fue solucionado y ahora funciona correctamente. |
-| Remove | ✅ |  Una vez hecho el print de multibloque borrar fue algo parecido. BORRA MULTIBLOQUE |
+| Remove | ✅ |  Una vez hecho el print de multibloque, borrar fue algo parecido. BORRA MULTIBLOQUE |
 | Imprimir | ✅ |  Ser capaces de leer archivos con más de un bloque fue complicado ya que no siempre accedíamos a los bloques correctos. LEE MULTIBLOQUE |
 | Copiar | ✅ |  La lógica de copiar es parecida a la de print con la complicación de tener que buscar espacio libre para el nuevo archivo. COPIA MULTIBLOQUE |
 | Commits, documentación y video | ✅ |  En cuanto a github no tuvimos muchas dificultades ya que estábamos familiarizados con la herramienta. |
